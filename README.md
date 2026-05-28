@@ -36,7 +36,7 @@ Applied CIS Benchmark hardening to the target server:
 - Auth.log evidence captured and verified
 
 ![Hydra brute force](screenshots/03-hydra-brute-force.jpg)
-![auth.log failures](screenshots/07-auth-log-failed.jpg)
+![auth.log failures](screenshots/07-auth-log-failed.png)
 ![Fail2ban status](screenshots/02-fail2ban-status.png)
 
 ### 3. File Integrity Monitoring (AIDE)
