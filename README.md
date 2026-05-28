@@ -68,6 +68,9 @@ Applied CIS Benchmark hardening to the target server:
 - Custom Analytics Rule: detects known malicious IP (192.168.120.130)
 - Threat Intelligence indicator imported for attacker IP (Confidence: 90, TLP: Red)
 
+![Sentinel incidents list](screenshots/14-sentinel-incidents-list.jpg)
+![Sentinel incident detail with attacker IP entity](screenshots/13-sentinel-incident.jpg)
+
 ### 7. Ansible Roles (Compliance as Code)
 Automated the entire hardening process using Ansible with 3 roles:
 
