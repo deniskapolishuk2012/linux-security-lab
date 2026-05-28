@@ -1,0 +1,4 @@
+-w /var/log/auth.log -p r -k auth_log
+-w /etc/ssh/sshd_config -p wa -k ssh_config
+-w /etc/sudoers -p wa -k sudoers
+-w /etc/passwd -p wa -k user_changes

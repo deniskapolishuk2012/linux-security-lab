@@ -1,0 +1,11 @@
+---
+- name: Linux Security Hardening
+  hosts: all
+  become: yes
+  vars:
+    wazuh_manager_ip: "192.168.120.134"
+
+  roles:
+    - cis-hardening
+    - fail2ban
+    - wazuh-agent

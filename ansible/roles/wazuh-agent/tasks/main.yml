@@ -1,0 +1,39 @@
+---
+- name: Install gnupg
+  apt:
+    name: gnupg
+    state: present
+
+- name: Add Wazuh GPG key
+  shell: |
+    curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | \
+    gpg --no-default-keyring \
+    --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg \
+    --import
+    chmod 644 /usr/share/keyrings/wazuh.gpg
+  args:
+    creates: /usr/share/keyrings/wazuh.gpg
+
+- name: Add Wazuh repository
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main"
+    state: present
+    filename: wazuh
+
+- name: Install wazuh-agent
+  apt:
+    name: wazuh-agent
+    state: present
+    update_cache: yes
+
+- name: Configure Wazuh manager IP
+  lineinfile:
+    path: /var/ossec/etc/ossec.conf
+    regexp: '<address>MANAGER_IP</address>'
+    line: '    <address>{{ wazuh_manager_ip }}</address>'
+
+- name: Enable and start wazuh-agent
+  systemd:
+    name: wazuh-agent
+    enabled: yes
+    state: started
