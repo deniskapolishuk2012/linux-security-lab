@@ -16,7 +16,7 @@ All VMs run in VMware with NAT networking.
 
 ## What Was Built
 
-### 1. CIS Hardening (Lynis score: 57 → 70)
+### 1. CIS Hardening (Lynis score: 57 → 73)
 Applied CIS Benchmark hardening to the target server:
 - **SSH hardening**: PermitRootLogin disabled, MaxAuthTries 3, key-only authentication
 - **sysctl kernel hardening**: SYN flood protection, IP spoofing prevention, ICMP redirect blocking
@@ -27,10 +27,17 @@ Applied CIS Benchmark hardening to the target server:
 - **rkhunter**: Rootkit scanner
 - **Login banner**: Authorized access warning
 
+![Lynis score 73](screenshots/01-lynis-score-73.png)
+![SSH key-only auth](screenshots/06-ssh-key-only.jpg)
+
 ### 2. Brute Force Attack + Detection
 - Simulated SSH brute force attack using **Hydra** from attacker VM
 - **Fail2ban** automatically banned attacker IP after 3 failed attempts
 - Auth.log evidence captured and verified
+
+![Hydra brute force](screenshots/03-hydra-brute-force.jpg)
+![auth.log failures](screenshots/07-auth-log-failed.jpg)
+![Fail2ban status](screenshots/02-fail2ban-status.png)
 
 ### 3. File Integrity Monitoring (AIDE)
 - Initialized AIDE database baseline
@@ -41,11 +48,18 @@ Applied CIS Benchmark hardening to the target server:
 - Basic port scan: only port 22/tcp open (firewall working)
 - Vulnerability scan (`--script vuln`): **0 vulnerabilities found**
 
+![Nmap service scan](screenshots/05-nmap-service-scan.jpg)
+![Nmap vuln scan](screenshots/04-nmap-vuln-scan.jpg)
+
 ### 5. Wazuh SIEM
 - Deployed Wazuh 4.14.5 all-in-one on dedicated Ubuntu 22.04 VM
 - Installed Wazuh Agent on target server
 - Hydra brute force attack generated **14 Authentication Failure alerts**
 - MITRE ATT&CK classification: **T1110 - Brute Force / Password Guessing**
+
+![Wazuh agent active](screenshots/09-wazuh-agent-active.png)
+![Wazuh MITRE ATT&CK framework](screenshots/10-wazuh-mitre-framework.png)
+![Wazuh T1110 brute force events](screenshots/11-wazuh-t1110-events.png)
 
 ### 6. Microsoft Sentinel Integration
 - Created Log Analytics Workspace connected to Microsoft Sentinel
@@ -86,6 +100,8 @@ ansible-playbook -i inventory/hosts.yml playbook.yml --vault-password-file ~/.va
   - SQL Injection: `?id=1+UNION+SELECT+1,2,3--` → **403 Forbidden** (Anomaly Score: 18)
   - XSS: `?search=<script>alert('xss')</script>` → **403 Forbidden**
 
+![ModSecurity 403 Forbidden](screenshots/12-modsecurity-403.jpg)
+
 ### 9. Privilege Escalation Demo
 Demonstrated sudo misconfiguration exploitation (GTFOBins technique):
 
@@ -99,6 +115,8 @@ whoami  # root
 ```
 
 All privilege escalation activity logged in auth.log and forwarded to Wazuh/Sentinel.
+
+![Privilege escalation to root](screenshots/08-privilege-escalation.jpg)
 
 ---
 
